@@ -9,5 +9,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <>
+      <h3 className="text-3xl text-purple-500 font-bold">
+        Bienvenido a React Router{" "}
+      </h3>
+    </>
+  );
 }

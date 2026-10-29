@@ -10,6 +10,8 @@ export default [
   // Home
   index('routes/home.tsx'),
 
+  route('testing', 'routes/testing.tsx'),
+
   /**
     prefix
     Antepone un path a un grupo de rutas. No crea componente, no crea `<Outlet />`, no agrega ningún nivel al árbol. Devuelve un array,
@@ -27,7 +29,7 @@ export default [
       // No conversation selected
       index('routes/chat/no-chat-selected-page.tsx'),
       // Conversation
-      route(':chatId', 'routes/chat/client-chat-page.tsx'),
+      route('client/:chatId', 'routes/chat/client-chat-page.tsx'),
     ]),
   ]),
 ] satisfies RouteConfig

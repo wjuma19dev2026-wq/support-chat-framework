@@ -21,4 +21,13 @@ export default [
       route('register', 'routes/auth/register-page.tsx'),
     ]),
   ]),
+
+  ...prefix('/chat', [
+    layout('layouts/chat-layout.tsx', [
+      // No conversation selected
+      index('routes/chat/no-chat-selected-page.tsx'),
+      // Conversation
+      route(':chatId', 'routes/chat/client-chat-page.tsx'),
+    ]),
+  ]),
 ] satisfies RouteConfig

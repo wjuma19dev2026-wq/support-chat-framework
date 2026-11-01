@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router'
+import { Link, Outlet, redirect } from 'react-router'
 
 import { Button } from '~/components/ui/button'
 import { X } from 'lucide-react'
@@ -7,8 +7,18 @@ import { NoContactSelected } from '~/auth/components/NoContactSelected'
 import type { Route } from './+types/chat-layout'
 import { getClients } from '~/fake/fake.data'
 import type { Client } from '~/routes/chat/interfaces/chat-interfaces'
+import { destroySession, getSession } from '~/session.server'
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get('Cookie'))
+
+  if (!session.get('userId')) {
+    return redirect('/auth/login', {
+      headers: {
+        'Set-Cookie': await destroySession(session),
+      },
+    })
+  }
   const clients: Client[] = await getClients()
   return { clients }
 }

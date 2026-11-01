@@ -1,5 +1,4 @@
-import type { ComponentProps } from 'react'
-
+import { data, Link, redirect, Form } from 'react-router'
 import { cn } from '~/lib/utils'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
@@ -11,17 +10,61 @@ import {
   FieldSeparator,
 } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
-import { Link } from 'react-router'
+import type { Route } from './+types/login-page'
+import { commitSession, getSession } from '~/session.server'
+import { useEffect } from 'react'
 
-export default function Login({ className, ...props }: ComponentProps<'div'>) {
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get('Cookie'))
+  // console.log('serverLoader: ' + session.has('userId'))
+  if (session.get('userId')) {
+    return redirect('/chat')
+  }
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get('Cookie'))
+  const formData = await request.formData()
+  const email = formData.get('email')
+  const password = formData.get('password')
+
+  // ! Validar y lanzar excepcion en caso de error
+  if (email === 'algo@user.com') {
+    session.flash('error', 'Invalid email')
+    return data(
+      { error: 'Invalid email' },
+      {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+        status: 404,
+      },
+    )
+  }
+
+  // ? En caso de que todo este bien, seteamos la Cookie
+  session.set('token', 'token-1234567890')
+  session.set('userId', 'U1-123456')
+
+  return redirect('/chat', {
+    headers: {
+      'Set-Cookie': await commitSession(session),
+    },
+  })
+}
+
+export default function Login({ actionData }: Route.ComponentProps) {
+  useEffect(() => {
+    if (actionData?.error) {
+      alert(actionData.error)
+    }
+  }, [actionData])
+
   return (
-    <div
-      className={cn('flex flex-col gap-6', className)}
-      {...props}
-    >
+    <div className={cn('flex flex-col gap-6')}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form
+          <Form
             method="post"
             className="p-6 md:p-8"
           >
@@ -103,7 +146,7 @@ export default function Login({ className, ...props }: ComponentProps<'div'>) {
                 <Link to="/auth/register">Registrate</Link>
               </FieldDescription>
             </FieldGroup>
-          </form>
+          </Form>
 
           <div className="bg-muted relative hidden md:block">
             <img

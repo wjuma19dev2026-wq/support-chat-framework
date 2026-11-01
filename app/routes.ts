@@ -11,6 +11,12 @@ export default [
   index('routes/home.tsx'),
 
   route('testing', 'routes/testing.tsx'),
+  route('testing-args/:clientId', 'routes/testing-args.tsx'),
+
+  /**
+   * Logout
+   */
+  route('/auth/logout', './auth/actions/logout.action.tsx'),
 
   /**
     prefix

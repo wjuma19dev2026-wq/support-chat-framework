@@ -1,4 +1,5 @@
 import { LogOut } from 'lucide-react'
+import { Form } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { ContactItem } from './ContactItem'
@@ -45,12 +46,18 @@ export const ContactList = ({ clients }: Props) => {
           </Button>
         </div>
         <div className="pt-4 mt-4 grid">
-          <Button
-            variant="outline"
-            className="cursor-pointer"
+          <Form
+            method="post"
+            action="/auth/logout"
           >
-            <LogOut className="h-4 w-4 mr-2" /> Cerrar Session
-          </Button>
+            <Button
+              type="submit"
+              variant="outline"
+              className="cursor-pointer w-full"
+            >
+              <LogOut className="h-4 w-4 mr-2" /> Cerrar Session
+            </Button>
+          </Form>
         </div>
       </div>
     </ScrollArea>

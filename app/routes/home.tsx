@@ -1,6 +1,4 @@
 import type { Route } from './+types/home'
-import { Welcome } from '../welcome/welcome'
-import ClientChatPage from './chat/client-chat-page'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,8 +10,9 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <p>
-        Bienvenido a <span>Support Chat</span>
+      <h1 className="text-5xl font-light">Bienvenidos a React Router!</h1>
+      <p className="text-2xl">
+        Proyecto de React Router Framework creado con Vite
       </p>
     </>
   )
